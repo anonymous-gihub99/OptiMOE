@@ -1,0 +1,100 @@
+% NeurIPS ML4Sys Workshop - LaTeX Tables
+% Copy these tables into your main paper
+
+% ===== MAIN PAPER TABLES =====
+
+% Table 1: Scalability Results
+\begin{table}[h]
+\centering
+\caption{OptiMoE Performance Across Different Cluster Scales. Latency measurements in microseconds (μs) with standard deviation. Improvement percentage and reconfiguration statistics demonstrate scalability.}
+\label{tab:scalability}
+\begin{tabular}{rccccc}
+\toprule
+\textbf{Nodes} & \textbf{Baseline (μs)} & \textbf{OptiMoE (μs)} & \textbf{Improvement} & \textbf{Switches} & \textbf{Switch Rate} \\
+\midrule
+16 & 5.8 ± 1.4 & 5.0 ± 1.2 & 13.9\% & 0 & 0.0\% \\
+32 & 4.7 ± 1.3 & 3.8 ± 1.1 & 19.2\% & 1 & 2.0\% \\
+64 & 4.2 ± 1.4 & 3.0 ± 1.3 & 27.3\% & 1 & 2.0\% \\
+128 & 3.9 ± 1.5 & 2.6 ± 1.0 & 34.0\% & 2 & 4.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 2: Ablation Study
+\begin{table}[h]
+\centering
+\caption{Ablation Study: Impact of OptiMoE Components on Performance}
+\label{tab:ablation}
+\small
+\begin{tabular}{lcccl}
+\toprule
+\textbf{Configuration} & \textbf{Latency} & \textbf{Improv.} & \textbf{Switch} & \textbf{Key Finding} \\
+ & \textbf{(μs)} & \textbf{(\%)} & \textbf{Rate (\%)} & \\
+\midrule
+Full OptiMoE & 3.03 & 27.2 & 2.5 & Baseline configuration \\
+w/o Confidence Hysteresis & 3.41 & 18.1 & 15.0 & Excessive switching reduces... \\
+w/o Amortization Window & 3.89 & 6.7 & 25.0 & Greedy decisions harmful \\
+w/o Locality Analysis & 3.67 & 12.0 & 8.0 & Poor regional traffic handling \\
+Fixed Fat-tree Only & 3.80 & 8.9 & 0.0 & Misses optimization opportu... \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ===== SUPPLEMENTARY TABLES =====
+
+% Table 3: Traffic Patterns (if space permits)
+\begin{table*}[t]
+\centering
+\caption{Traffic Pattern Characteristics and Optimal Topology Selection}
+\label{tab:patterns}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Pattern} & \textbf{Concentration} & \textbf{Locality} & \textbf{Optimal} & \textbf{Latency} & \textbf{Description} \\
+ & \textbf{(Gini)} & \textbf{Range} & \textbf{Topology} & \textbf{(μs)} & \\
+\midrule
+Hotspot & 0.65-0.85 & 0.20-0.40 & Fat-tree & 3.0 & Few experts handle majority \\
+Uniform & 0.20-0.40 & 0.20-0.40 & Torus & 5.0 & Equal distribution \\
+Regional & 0.45-0.60 & 0.80-0.95 & Mesh & 2.5 & Local clustering \\
+Skewed & 0.50-0.70 & 0.40-0.60 & Fat-tree & 3.2 & Power-law distribution \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+% Table 4: System Comparison (if space permits)
+\begin{table}[h]
+\centering
+\caption{Comparison with Baseline Approaches}
+\label{tab:comparison}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{System} & \textbf{Latency} & \textbf{Throughput} & \textbf{Adaptability} & \textbf{Switch} \\
+ & \textbf{(μs)} & \textbf{(Normalized)} & & \textbf{Overhead} \\
+\midrule
+Static Fat-tree & 4.50 & 0.75 & None & 0\% \\
+Static Mesh & 4.20 & 0.78 & None & 0\% \\
+Static Torus & 5.80 & 0.65 & None & 0\% \\
+Round-robin & 4.80 & 0.70 & Time-based & 15\% \\
+\textbf{OptiMoE} & 3.03 & 0.88 & Traffic-aware & 2.5\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 5: Hyperparameters (for Appendix)
+\begin{table}[h]
+\centering
+\caption{OptiMoE Hyperparameter Settings}
+\label{tab:hyperparameters}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Range} & \textbf{Impact} \\
+\midrule
+Amortization window ($W$) & 15 & 10-20 & Stability vs. responsiveness \\
+Confidence threshold ($\sigma$) & 0.6 & 0.4-0.8 & Switch frequency \\
+Min. switch gap & 12 & 5-15 & Oscillation prevention \\
+Concentration threshold & 0.55 & 0.5-0.7 & Fat-tree selection \\
+Locality threshold & 0.80 & 0.7-0.9 & Mesh selection \\
+Reconfiguration cost ($R$) & 25μs & 10-50μs & Hardware-dependent \\
+\bottomrule
+\end{tabular}
+\end{table}
+

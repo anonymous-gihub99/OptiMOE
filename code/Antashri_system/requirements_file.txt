@@ -1,0 +1,116 @@
+# requirements.txt
+# Core Dependencies
+torch
+transformers
+bitsandbytes
+accelerate
+sentencepiece
+
+# Audio Processing
+openai-whisper
+sounddevice
+soundfile
+librosa
+pydub
+pyaudio
+
+# Embeddings and Search
+sentence-transformers
+faiss-cpu  # Use faiss-gpu if CUDA available
+numpy
+pandas
+
+# Web Framework
+flask
+flask-cors
+flask-socketio
+python-socketio
+eventlet
+
+# YouTube Integration
+pytube
+youtube-dl
+google-api-python-client
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+
+# Utilities
+python-dotenv
+tqdm
+colorama
+pyyaml
+jsonschema
+
+# Logging and Monitoring
+loguru
+prometheus-client
+
+# Testing
+pytest
+pytest-cov
+pytest-asyncio
+mock
+
+# Data Processing
+scipy
+scikit-learn
+matplotlib
+seaborn
+
+# Additional ML
+einops
+safetensors
+
+---
+
+# .env.example
+# Model Configuration
+MODEL_NAME=mistralai/Mistral-7B-Instruct-v0.3
+EMBEDDING_MODEL=Qwen/Qwen3-Embedding-4B
+WHISPER_MODEL=base
+DEVICE=cpu
+
+# API Keys
+YOUTUBE_API_KEY=your_API_KEY
+HUGGINGFACE_TOKEN=YOUR_HF_TOKEN
+
+# Server Configuration
+HOST=0.0.0.0
+PORT=5000
+DEBUG_MODE=True
+
+# Audio Settings
+AUDIO_SAMPLE_RATE=16000
+AUDIO_CHUNK_SIZE=1024
+SILENCE_THRESHOLD=500
+RECORDING_DURATION=5
+
+# Emotion Detection
+EMOTION_THRESHOLD=0.6
+EMOTION_STABILITY_WINDOW=10
+MIN_CONFIDENCE=0.5
+
+# Music Playback
+MUSIC_DURATION=45  # seconds
+FADE_IN_DURATION=2
+FADE_OUT_DURATION=3
+MIN_TRIGGER_INTERVAL=30  # seconds between triggers
+
+# Paths
+DATA_PATH=./data
+MODEL_CACHE_PATH=./model_cache
+LOG_PATH=./logs
+TEMP_PATH=./temp
+
+# Logging
+LOG_LEVEL=INFO
+LOG_FILE=app.log
+LOG_MAX_SIZE=10485760  # 10MB
+LOG_BACKUP_COUNT=5
+
+# System
+MAX_CONVERSATION_HISTORY=10
+ENABLE_XAI=True
+ENABLE_CACHE=True
+CACHE_TTL=3600

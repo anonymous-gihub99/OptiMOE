@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antashiri - Contextual Music System</title>
+    
+    <!-- CSS Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .container {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .left-panel {
+            flex: 1;
+            max-width: 500px;
+        }
+        
+        .center-panel {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .right-panel {
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        .control-section {
+            margin-bottom: 25px;
+        }
+        
+        .control-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .mic-button {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-size: 48px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .mic-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .mic-button.active {
+            animation: pulse 2s infinite;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(245, 87, 108, 0.7); }
+            70% { box-shadow: 0 0 0 30px rgba(245, 87, 108, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 87, 108, 0); }
+        }
+        
+        .conversation-display {
+            height: 400px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .conversation-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .emotion-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .emotion-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        
+        .emotion-happy { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .emotion-sad { background: linear-gradient(135deg, #4169E1, #1E90FF); }
+        .emotion-energetic { background: linear-gradient(135deg, #FF6347, #FF4500); }
+        .emotion-calm { background: linear-gradient(135deg, #90EE90, #3CB371); }
+        .emotion-stressed { background: linear-gradient(135deg, #DC143C, #B22222); }
+        .emotion-romantic { background: linear-gradient(135deg, #FF69B4, #FF1493); }
+        .emotion-neutral { background: linear-gradient(135deg, #808080, #696969); }
+        
+        .music-player {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .song-info {
+            margin-bottom: 15px;
+        }
+        
+        .song-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .song-artist {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .youtube-player {
+            width: 100%;
+            height: 315px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        
+        .explanation-box {
+            background: #e8f4f8;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .explanation-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active { background: #28a745; animation: blink 2s infinite; }
+        .status-inactive { background: #dc3545; }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .left-panel, .center-panel, .right-panel {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>🎵 Antashiri</h1>
+        <p>Contextual Music Triggering System - Powered by AI</p>
+    </div>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Panel: Controls -->
+        <div class="panel left-panel">
+            <div class="control-section">
+                <h3>🎤 Voice Control</h3>
+                <button id="micButton" class="mic-button" onclick="toggleListening()">
+                    🎤
+                </button>
+                <div style="text-align: center; margin-top: 10px;">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span id="statusText">Click to start</span>
+                </div>
+            </div>
+            
+            <div class="control-section">
+                <h3>😊 Current Emotion</h3>
+                <div class="emotion-display">
+                    <span id="currentEmotion" class="emotion-badge emotion-neutral">Neutral</span>
+                    <span id="emotionConfidence">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="emotionProgress" class="progress-fill"></div>
+                </div>
+            </div>
+            
+            <div class="control-section">
+                <h3>📊 Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div id="turnCount" class="stat-value">0</div>
+                        <div class="stat-label">Turns</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="songCount" class="stat-value">0</div>
+                        <div class="stat-label">Songs Played</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="stability" class="stat-value">50%</div>
+                        <div class="stat-label">Stability</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="avgConfidence" class="stat-value">0%</div>
+                        <div class="stat-label">Avg Confidence</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Center Panel: Conversation & Music -->
+        <div class="panel center-panel">
+            <h3>💬 Conversation</h3>
+            <div id="conversationDisplay" class="conversation-display">
+                <div class="conversation-item">
+                    <strong>System:</strong> Ready to listen. Start speaking naturally!
+                </div>
+            </div>
+            
+            <div class="music-player">
+                <h3>🎵 Now Playing</h3>
+                <div id="songInfo" class="song-info">
+                    <div class="song-title">No music playing</div>
+                    <div class="song-artist">Start a conversation to trigger music</div>
+                </div>
+                <div id="youtubePlayer" class="youtube-player" style="display: none;">
+                    <iframe id="youtubeFrame" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Panel: Explanations -->
+        <div class="panel right-panel">
+            <h3>🤖 AI Explanation</h3>
+            <div id="explanationBox" class="explanation-box">
+                <h4>Why this music?</h4>
+                <p id="explanationText">
+                    The system will explain its music selections here based on your emotional state and conversation context.
+                </p>
+            </div>
+            
+            <div class="control-section" style="margin-top: 20px;">
+                <h3>🎸 Alternatives</h3>
+                <div id="alternativesList" style="background: #f8f9fa; border-radius: 10px; padding: 15px;">
+                    <p style="color: #666;">Alternative songs will appear here</p>
+                </div>
+            </div>
+            
+            <div class="control-section" style="margin-top: 20px;">
+                <h3>🔧 Settings</h3>
+                <div style="background: #f8f9fa; border-radius: 10px; padding: 15px;">
+                    <label style="display: block; margin-bottom: 10px;">
+                        Music Duration: <span id="durationValue">45</span>s
+                        <input type="range" id="musicDuration" min="30" max="90" value="45" style="width: 100%;">
+                    </label>
+                    <label style="display: block; margin-bottom: 10px;">
+                        Trigger Threshold: <span id="thresholdValue">60</span>%
+                        <input type="range" id="triggerThreshold" min="40" max="80" value="60" style="width: 100%;">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    
+    <!-- Main JavaScript -->
+    <script>
+        // Global variables
+        let socket = null;
+        let isListening = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let conversationHistory = [];
+        let currentEmotion = 'neutral';
+        let turnCount = 0;
+        let songCount = 0;
+        
+        // Initialize WebSocket connection
+        function initializeSocket() {
+            socket = io();
+            
+            socket.on('connect', function() {
+                console.log('Connected to server');
+                updateStatus('Connected', 'active');
+            });
+            
+            socket.on('disconnect', function() {
+                console.log('Disconnected from server');
+                updateStatus('Disconnected', 'inactive');
+            });
+            
+            socket.on('transcript', function(data) {
+                addConversationItem('You', data.text);
+                turnCount++;
+                document.getElementById('turnCount').textContent = turnCount;
+            });
+            
+            socket.on('emotion_update', function(data) {
+                updateEmotion(data);
+            });
+            
+            socket.on('music_selected', function(data) {
+                displayMusicSelection(data);
+            });
+            
+            socket.on('play_music', function(data) {
+                playYouTubeVideo(data);
+            });
+            
+            socket.on('error', function(data) {
+                console.error('Error:', data.message);
+                addConversationItem('System', `Error: ${data.message}`);
+            });
+        }
+        
+        // Toggle listening state
+        async function toggleListening() {
+            if (!isListening) {
+                await startListening();
+            } else {
+                stopListening();
+            }
+        }
+        
+        // Start listening
+        async function startListening() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                // Create MediaRecorder
+                mediaRecorder = new MediaRecorder(stream);
+                
+                mediaRecorder.ondataavailable = function(event) {
+                    if (event.data.size > 0) {
+                        // Convert to base64 and send to server
+                        const reader = new FileReader();
+                        reader.onloadend = function() {
+                            const base64data = reader.result.split(',')[1];
+                            socket.emit('audio_chunk', { audio: base64data });
+                        };
+                        reader.readAsDataURL(event.data);
+                    }
+                };
+                
+                // Start recording in chunks
+                mediaRecorder.start(1000); // Send chunks every second
+                
+                isListening = true;
+                socket.emit('start_listening');
+                
+                // Update UI
+                document.getElementById('micButton').classList.add('active');
+                updateStatus('Listening...', 'active');
+                addConversationItem('System', 'Listening started. Speak naturally!');
+                
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                addConversationItem('System', 'Error: Could not access microphone');
+            }
+        }
+        
+        // Stop listening
+        function stopListening() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+            
+            isListening = false;
+            socket.emit('stop_listening');
+            
+            // Update UI
+            document.getElementById('micButton').classList.remove('active');
+            updateStatus('Stopped', 'inactive');
+            addConversationItem('System', 'Listening stopped');
+        }
+        
+        // Update status indicator
+        function updateStatus(text, status) {
+            document.getElementById('statusText').textContent = text;
+            const indicator = document.getElementById('statusIndicator');
+            indicator.className = 'status-indicator';
+            indicator.classList.add(`status-${status}`);
+        }
+        
+        // Add conversation item
+        function addConversationItem(speaker, text) {
+            const display = document.getElementById('conversationDisplay');
+            const item = document.createElement('div');
+            item.className = 'conversation-item';
+            item.innerHTML = `<strong>${speaker}:</strong> ${text}`;
+            display.appendChild(item);
+            display.scrollTop = display.scrollHeight;
+            
+            // Keep history limited
+            if (display.children.length > 20) {
+                display.removeChild(display.firstChild);
+            }
+        }
+        
+        // Update emotion display
+        function updateEmotion(data) {
+            currentEmotion = data.emotion;
+            const confidence = Math.round(data.confidence * 100);
+            const stability = Math.round(data.stability * 100);
+            
+            // Update emotion badge
+            const emotionBadge = document.getElementById('currentEmotion');
+            emotionBadge.className = `emotion-badge emotion-${data.emotion}`;
+            emotionBadge.textContent = data.emotion.charAt(0).toUpperCase() + data.emotion.slice(1);
+            
+            // Update confidence
+            document.getElementById('emotionConfidence').textContent = `${confidence}%`;
+            document.getElementById('emotionProgress').style.width = `${confidence}%`;
+            
+            // Update stability
+            document.getElementById('stability').textContent = `${stability}%`;
+            
+            // Update average confidence
+            const avgConfidence = Math.round((parseInt(document.getElementById('avgConfidence').textContent) + confidence) / 2);
+            document.getElementById('avgConfidence').textContent = `${avgConfidence}%`;
+        }
+        
+        // Display music selection
+        function displayMusicSelection(data) {
+            songCount++;
+            document.getElementById('songCount').textContent = songCount;
+            
+            // Update song info
+            document.getElementById('songInfo').innerHTML = `
+                <div class="song-title">${data.song.title}</div>
+                <div class="song-artist">${data.song.artist}</div>
+            `;
+            
+            // Update explanation
+            if (data.explanation) {
+                document.getElementById('explanationText').textContent = data.explanation;
+            }
+            
+            // Update alternatives
+            if (data.alternatives && data.alternatives.length > 0) {
+                let altHtml = '<ul style="list-style: none; padding: 0;">';
+                data.alternatives.forEach(alt => {
+                    altHtml += `<li style="margin-bottom: 8px;">• ${alt.title} - ${alt.artist}</li>`;
+                });
+                altHtml += '</ul>';
+                document.getElementById('alternativesList').innerHTML = altHtml;
+            }
+            
+            addConversationItem('System', `Selected: ${data.song.title} by ${data.song.artist}`);
+        }
+        
+        // Play YouTube video
+        function playYouTubeVideo(data) {
+            const player = document.getElementById('youtubePlayer');
+            const frame = document.getElementById('youtubeFrame');
+            
+            // Extract video ID from URL
+            const videoId = extractVideoId(data.url);
+            
+            if (videoId) {
+                // Set iframe source with autoplay
+                frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&start=0&end=${data.duration}`;
+                player.style.display = 'block';
+                
+                // Auto-stop after duration
+                setTimeout(() => {
+                    frame.src = '';
+                    player.style.display = 'none';
+                }, data.duration * 1000);
+            }
+        }
+        
+        // Extract YouTube video ID
+        function extractVideoId(url) {
+            const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+        
+        // Settings handlers
+        document.getElementById('musicDuration').addEventListener('input', function(e) {
+            document.getElementById('durationValue').textContent = e.target.value;
+        });
+        
+        document.getElementById('triggerThreshold').addEventListener('input', function(e) {
+            document.getElementById('thresholdValue').textContent = e.target.value;
+        });
+        
+        // Initialize on page load
+        window.onload = function() {
+            initializeSocket();
+            updateStatus('Ready', 'inactive');
+        };
+    </script>
+</body>
+</html>

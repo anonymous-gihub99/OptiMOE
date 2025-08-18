@@ -1,0 +1,39 @@
+{
+  "configuration": {
+    "num_nodes": 64,
+    "num_experts": 128,
+    "num_iterations": 40
+  },
+  "baseline": {
+    "average_latency": 4.166364450829207,
+    "std_latency": 1.4194576468487243,
+    "min_latency": 1.514253119321377,
+    "max_latency": 6.166351106713009
+  },
+  "optimoe": {
+    "average_latency": 3.032552780707114,
+    "std_latency": 1.3235695968682755,
+    "min_latency": 1.5128096921409209,
+    "max_latency": 4.6249508299096735,
+    "num_switches": 1,
+    "switch_rate": 2.5
+  },
+  "improvement": {
+    "percentage": 27.213453923754482,
+    "absolute_\u03bcs": 1.1338116701220926
+  },
+  "topology_usage": {
+    "mesh": {
+      "count": 30,
+      "percentage": 75.0
+    },
+    "fattree": {
+      "count": 10,
+      "percentage": 25.0
+    }
+  },
+  "switch_effectiveness": {
+    "average_improvement": 34.443324399058476,
+    "successful_rate": 100.0
+  }
+}

@@ -103,18 +103,13 @@ python scripts/optimoe_networkx_simulator.py
 ## 📁 Repository Structure
 
 ```
-OptiMOE/
-├── scripts/                      # Main implementation scripts
+OptiMOE/Code/
+├── Code/                      # Main implementation scripts
 │   ├── optimoe_core_implementation.py
 │   ├── optimoe_networkx_simulator.py
 │   ├── optimoe_quick_run.py
 │   └── neurips_figure_generation.py
-├── experiments/                   # Experiment configurations
-│   └── config.yaml
 ├── results/                      # Output directory for results
-├── paper/                        # Paper LaTeX source and figures
-│   └── OptiMoE_NeurIPS2025_ML4Sys.tex
-├── requirements.txt
 └── README.md
 ```
 
